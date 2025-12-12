@@ -26,6 +26,14 @@ typedef struct Node
 Node *head = NULL;
 Node *tail = NULL;
 
+void insert_at_end(int value);
+
+void make_list_circular(void);
+
+void process_combinations(void);
+
+struct Node *create_node(int value);
+
 struct Node *create_node(int value)
 {
     Node *new_node = malloc(sizeof(Node));
@@ -66,7 +74,7 @@ void insert_at_end(int value)
     tail = new_node;
 }
 
-void make_list_circular()
+void make_list_circular(void)
 {
     if (head != NULL && tail != NULL)
     {
@@ -75,7 +83,7 @@ void make_list_circular()
     }
 }
 
-void print_list()
+void print_list(void)
 {
     Node *current = head;
 
@@ -134,7 +142,7 @@ Node *set_dial_to_starting_position(Node *current, int destination)
 }
 
 // assumes at least 2 combinations present, the first is the starting point, the second onwards are the direction to turn and the amount to turn by
-void process_combinations()
+void process_combinations(void)
 {
     int number_of_combinations = sizeof(combinations) / sizeof(combinations[0]);
 
@@ -176,7 +184,7 @@ void process_combinations()
     printf("The password is: %d\n", password);
 }
 
-int main(int argc, char* argv[])
+int main(void)
 {
     for(int i = 0; i < 100; ++i)
     {
