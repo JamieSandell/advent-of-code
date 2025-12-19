@@ -1,48 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-// char *combinations[] =
-// {
-//     "L68",
-//     "L30",
-//     "R48",
-//     "L5",
-//     "R60",
-//     "L55",
-//     "L1",
-//     "L99",
-//     "R14",
-//     "L82"
-// };
-
-typedef struct Node
-{
-    int data;
-    struct Node *next;
-    struct Node *prev;
-} Node;
-
-Node *head = NULL;
-Node *tail = NULL;
+#include <string.h>
+#include "linked_list.h"
 
 typedef struct Input
 {
     FILE *file;
     char *buffer;
-    long number_of_bytes;
+    long bytes_read;
+    long file_size;
 } Input;
-
-void insert_at_end(int value);
-
-void make_list_circular(void);
 
 struct Input *read_input(void);
 
 void process_combinations(const char *combinations);
-
-struct Node *create_node(int value);
-
-void print_list(void);
 
 void null_terminate_strings(char *buffer);
 
@@ -55,11 +26,19 @@ int main(void)
 
     make_list_circular();
 
-    print_list();
+    //print_list();
 
     Input* input = read_input();
 
     null_terminate_strings(input->buffer);
+
+    // char *current_combination = input->buffer;
+
+    // while (*current_combination != '\0')
+    // {
+    //     printf("%s\n", current_combination);
+    //     current_combination += strlen(current_combination) + 1;
+    // }
 
     process_combinations(input->buffer);
 
@@ -98,10 +77,10 @@ struct Input *read_input(void)
     }
 
     fseek(input->file, 0L, SEEK_END);
-    input->number_of_bytes = ftell(input->file) + 1; // so we can null terminate it
+    input->file_size = ftell(input->file);
     fseek(input->file, 0L, SEEK_SET);
 
-    input->buffer = calloc(input->number_of_bytes, sizeof(char));
+    input->buffer = calloc(input->file_size + 1, sizeof(char));
 
     if (input->buffer == NULL)
     {
@@ -109,72 +88,14 @@ struct Input *read_input(void)
         exit(EXIT_FAILURE);
     }
 
-    fread(input->buffer, sizeof(char), input->number_of_bytes, input->file);
+    input->bytes_read = fread(input->buffer, sizeof(char), input->file_size, input->file);
     fclose(input->file);
+
+    input->buffer[input->bytes_read] = '\0';
 
     printf("contents of input.txt\n\n%s", input->buffer);
 
     return input;
-}
-
-struct Node *create_node(int value)
-{
-    Node *new_node = malloc(sizeof(Node));
-
-    if (new_node == NULL)
-    {
-        printf("Memory allocation failed.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    new_node->data = value;
-    new_node->prev = NULL;
-    new_node->next = NULL;
-
-    return new_node;
-}
-
-void insert_at_end(int value)
-{
-    Node *new_node = create_node(value);
-
-    if (head == NULL)
-    {
-        head = new_node;
-        tail = new_node;
-        return;
-    }
-
-    Node *temp = head;
-
-    while (temp->next != NULL)
-    {
-        temp = temp->next;
-    }
-
-    temp->next = new_node;
-    new_node->prev = temp;
-    tail = new_node;
-}
-
-void make_list_circular(void)
-{
-    if (head != NULL && tail != NULL)
-    {
-        tail->next = head;
-        head->prev = tail;
-    }
-}
-
-void print_list(void)
-{
-    Node *current = head;
-
-    do
-    {
-        printf("%d\n", current->data);
-        current = current->next;
-    } while (current != head);
 }
 
 Node *turn_dial_clockwise(Node *current, int x)
@@ -225,6 +146,7 @@ Node *set_dial_to_starting_position(Node *current, int destination)
 }
 
 // assumes 50 is the starting point on the dial and all input is valid (LX, RX, e.g. L15, R1)
+// assumes lines end with LF (\n)
 void process_combinations(const char *combinations)
 {
     Node *current = head;
@@ -233,12 +155,12 @@ void process_combinations(const char *combinations)
 
     int password = 0;
 
-    for (int i = 0; i < number_of_combinations; ++i)
-    {
-        char direction = *(combinations[i]);
-        char *digits = combinations[i] + 1;
-        int turn_amount = convert_string_to_int(digits);
+    const char *current_string = combinations;
 
+    while (*current_string != '\0')
+    {
+        char direction = current_string[0];
+        int turn_amount = atoi(current_string + 1);
         printf("Turning %c %d times\n", direction, turn_amount);
 
         if (direction == 'R')
@@ -256,6 +178,8 @@ void process_combinations(const char *combinations)
         {
             ++password;
         }
+
+        current_string += strlen(current_string) + 1;
     }
 
     printf("The password is: %d\n", password);
