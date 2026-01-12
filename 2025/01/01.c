@@ -15,6 +15,8 @@ struct Input *read_input(void);
 
 void process_combinations(const char *combinations, List *dial);
 
+void process_combinations_method_0x434C49434B(const char *combinations, List *dial);
+
 void null_terminate_strings(char *buffer);
 
 int main(void)
@@ -42,7 +44,9 @@ int main(void)
     //     current_combination += strlen(current_combination) + 1;
     // }
 
-    process_combinations(input->buffer, dial);
+    //process_combinations(input->buffer, dial);
+
+    process_combinations_method_0x434C49434B(input->buffer, dial);
 
     return EXIT_SUCCESS;
 }
@@ -185,4 +189,60 @@ void process_combinations(const char *combinations, List *dial)
     }
 
     printf("The password is: %d\n", password);
+}
+
+// assumes 50 is the starting point on the dial and all input is valid (LX, RX, e.g. L15, R1)
+// assumes lines end with LF (\n)
+void process_combinations_method_0x434C49434B(const char *combinations, List *dial)
+{
+    List_Node *current = dial->head;
+    current = set_dial_to_starting_position(current, 50);
+    printf("Dial has been turned to %d\n", current->data);
+
+    int password = 0;
+
+    const char *current_string = combinations;
+
+    while (*current_string != '\0')
+    {
+        char direction = current_string[0];
+        int turn_amount_target = atoi(current_string + 1);
+        printf("Turning %c %d times\n", direction, turn_amount_target);
+
+        if (direction == 'R')
+        {
+            for (int turn_amount = 0; turn_amount < turn_amount_target; ++turn_amount)
+            {
+                current = turn_dial_clockwise(current, 1);
+            }
+
+            if (current->data == 0)
+            {
+                ++password;
+            }
+        }
+        else
+        {
+           for (int turn_amount = 0; turn_amount < turn_amount_target; ++turn_amount)
+            {
+                current = turn_dial_anti_clockwise(current, 1);
+            }
+
+            if (current->data == 0)
+            {
+                ++password;
+            }
+        }
+
+        if (current->data == 0)
+        {
+            ++password;
+        }
+
+        printf("Dial is at position %d\n", current->data);
+
+        current_string += strlen(current_string) + 1;
+    }
+
+    printf("The password using method 0x434C49434B is: %d\n", password);
 }
