@@ -3,14 +3,27 @@
 
 #include <stdio.h>
 
-typedef struct Node Node;
+typedef struct List_Node
+{
+    int data;
+    struct List_Node *next;
+    struct List_Node *prev;
+} List_Node;
 
-void insert_at_end(int value);
+typedef struct List
+{
+    List_Node *head;
+    List_Node *tail;
+} List;
 
-void make_list_circular(void);
+void ll_insert_at_end(List *list, int value);
 
-Node *create_node(int value);
+void ll_make_list_circular(List *list);
 
-void print_list(void);
+List *ll_create_list(void);
+
+List_Node *ll_create_node(int value);
+
+void ll_print_list(List *list);
 
 #endif

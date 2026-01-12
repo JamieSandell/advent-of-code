@@ -1,19 +1,25 @@
 #include <stdlib.h>
 #include "linked_list.h"
 
-struct Node
+struct List *ll_create_list(void)
 {
-    int data;
-    struct Node *next;
-    struct Node *prev;
-};
+    List *new_list = malloc(sizeof(List));
 
-Node *head = NULL;
-Node *tail = NULL;
+    if (new_list == NULL)
+    {
+        printf("Memory allocation failed.\n");
+        exit(EXIT_FAILURE);
+    }
 
-struct Node *create_node(int value)
+    new_list->head = NULL;
+    new_list->tail = NULL;
+
+    return new_list;
+}
+
+struct List_Node *ll_create_node(int value)
 {
-    Node *new_node = malloc(sizeof(Node));
+    List_Node *new_node = malloc(sizeof(List_Node));
 
     if (new_node == NULL)
     {
@@ -28,38 +34,38 @@ struct Node *create_node(int value)
     return new_node;
 }
 
-void insert_at_end(int value)
+void ll_insert_at_end(List *list, int value)
 {
-    Node *new_node = create_node(value);
+    List_Node *new_node = ll_create_node(value);
 
-    if (head == NULL)
+    if (list->head == NULL)
     {
-        head = new_node;
-        tail = new_node;
+        list->head = new_node;
+        list->tail = new_node;
         return;
     }
 
-    tail->next = new_node;
-    new_node->prev = tail;
-    tail = new_node;
+    list->tail->next = new_node;
+    new_node->prev = list->tail;
+    list->tail = new_node;
 }
 
-void make_list_circular(void)
+void ll_make_list_circular(List *list)
 {
-    if (head != NULL && tail != NULL)
+    if (list->head != NULL && list->tail != NULL)
     {
-        tail->next = head;
-        head->prev = tail;
+        list->tail->next = list->head;
+        list->head->prev = list->tail;
     }
 }
 
-void print_list(void)
+void ll_print_list(List *list)
 {
-    Node *current = head;
+    List_Node *current = list->head;
 
     do
     {
         printf("%d\n", current->data);
         current = current->next;
-    } while (current != head);
+    } while (current != list->head);
 }

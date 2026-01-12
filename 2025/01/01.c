@@ -13,18 +13,20 @@ typedef struct Input
 
 struct Input *read_input(void);
 
-void process_combinations(const char *combinations);
+void process_combinations(const char *combinations, List *dial);
 
 void null_terminate_strings(char *buffer);
 
 int main(void)
 {
+    List *dial = ll_create_list();
+
     for(int i = 0; i < 100; ++i)
     {
-        insert_at_end(i);
+        ll_insert_at_end(dial, i);
     }
 
-    make_list_circular();
+    ll_make_list_circular(dial);
 
     //print_list();
 
@@ -40,7 +42,7 @@ int main(void)
     //     current_combination += strlen(current_combination) + 1;
     // }
 
-    process_combinations(input->buffer);
+    process_combinations(input->buffer, dial);
 
     return EXIT_SUCCESS;
 }
@@ -98,7 +100,7 @@ struct Input *read_input(void)
     return input;
 }
 
-Node *turn_dial_clockwise(Node *current, int x)
+List_Node *turn_dial_clockwise(List_Node *current, int x)
 {
     for (int i = 0; i < x; ++i)
     {
@@ -108,7 +110,7 @@ Node *turn_dial_clockwise(Node *current, int x)
     return current;
 }
 
-Node *turn_dial_anti_clockwise(Node *current, int x)
+List_Node *turn_dial_anti_clockwise(List_Node *current, int x)
 {
     for (int i = 0; i < x; ++i)
     {
@@ -135,7 +137,7 @@ int convert_string_to_int(char *string)
 }
 
 // assumes a combination number between 0 and 99 has been provided.
-Node *set_dial_to_starting_position(Node *current, int destination)
+List_Node *set_dial_to_starting_position(List_Node *current, int destination)
 {
     while (current->data != destination)
     {
@@ -147,9 +149,9 @@ Node *set_dial_to_starting_position(Node *current, int destination)
 
 // assumes 50 is the starting point on the dial and all input is valid (LX, RX, e.g. L15, R1)
 // assumes lines end with LF (\n)
-void process_combinations(const char *combinations)
+void process_combinations(const char *combinations, List *dial)
 {
-    Node *current = head;
+    List_Node *current = dial->head;
     current = set_dial_to_starting_position(current, 50);
     printf("Dial has been turned to %d\n", current->data);
 
