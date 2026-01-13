@@ -208,22 +208,14 @@ void process_combinations_method_0x434C49434B(const char *combinations, List *di
         char direction = current_string[0];
         int turn_amount_target = atoi(current_string + 1);
         printf("Turning %c %d times\n", direction, turn_amount_target);
-
-        if (direction == 'R')
+ 
+        for (int turn_amount = 0; turn_amount < turn_amount_target; ++turn_amount)
         {
-            for (int turn_amount = 0; turn_amount < turn_amount_target; ++turn_amount)
+            if (direction == 'R')
             {
                 current = turn_dial_clockwise(current, 1);
             }
-
-            if (current->data == 0)
-            {
-                ++password;
-            }
-        }
-        else
-        {
-           for (int turn_amount = 0; turn_amount < turn_amount_target; ++turn_amount)
+            else
             {
                 current = turn_dial_anti_clockwise(current, 1);
             }
@@ -234,13 +226,7 @@ void process_combinations_method_0x434C49434B(const char *combinations, List *di
             }
         }
 
-        if (current->data == 0)
-        {
-            ++password;
-        }
-
         printf("Dial is at position %d\n", current->data);
-
         current_string += strlen(current_string) + 1;
     }
 
