@@ -4,7 +4,7 @@
 #include "file_handling.h"
 
 // caller is responsible for the lifecycle of buffer
-void *read_entire_file_into_buffer(char *buffer)
+char *read_entire_file_into_buffer(void)
 {
     FILE *input_file = fopen("input.txt", "r");
 
@@ -17,7 +17,7 @@ void *read_entire_file_into_buffer(char *buffer)
     fseek(input_file, 0L, SEEK_END);
     int64_t input_file_size = ftell(input_file);
     fseek(input_file, 0L, SEEK_SET);
-    buffer = calloc(input_file_size + 1, sizeof(char));
+    char *buffer = calloc(input_file_size + 1, sizeof(char));
 
     if (buffer == NULL)
     {
@@ -29,4 +29,6 @@ void *read_entire_file_into_buffer(char *buffer)
     fclose(input_file);
     buffer[bytes_read] = '\0';
     fprintf(stdout, "Info: contents of input.txt\n\n%s", buffer);
+
+    return buffer;
 }
