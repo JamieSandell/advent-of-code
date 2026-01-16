@@ -12,7 +12,7 @@ int main(void)
     char *range = strtok(raw_input, ",");
 
     fprintf(stdout, "\n");
-    int64_t password = 0;
+    int64_t password_one = 0;
 
     while (range != NULL)
     {
@@ -36,7 +36,7 @@ int main(void)
         for (int64_t i = lower; i <= upper; ++i)
         {
             char i_string[11];
-            sprintf(i_string, "%ld", i);
+            sprintf_s(i_string, sizeof(i_string) / sizeof(i_string[0]), "%lld", i);
             int i_string_length = strlen(i_string);
 
             if (i_string_length % 2 != 0)
@@ -55,14 +55,19 @@ int main(void)
             if (strcmp(left, right) == 0)
             {
                 fprintf(stdout, "%s is an invalid id.\n", i_string);
-                password += i;
+                password_one += i;
             }
         }
 
-        range = strtok(NULL, ",");
+        /*
+        loop through the range
+        convert the number to a string
+        */
+
+        range = strtok_s(NULL, ",");
     }
 
-    fprintf(stdout, "password is: %ld", password);
+    fprintf(stdout, "password one is: %lld", password_one);
 
     return EXIT_SUCCESS;
 }
