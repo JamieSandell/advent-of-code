@@ -7,7 +7,7 @@
 #define MAX_DIGITS_IN_RANGE 11
 
 void get_range_numbers(const char *range, int64_t *lower, int64_t *upper);
-void split_range_string(const char *range,);
+void split_range_string(const char *range, char **lower, char **upper);
 
 int main(void)
 {
@@ -132,4 +132,9 @@ void get_range_numbers(const char *range, int64_t *lower, int64_t *upper)
     upper_string[upper_char_count] = '\0';
     fprintf(stdout, "upper range: %s\n", upper_string);
     *upper = atol(upper_string);
+}
+
+void split_range_string(const char *range, char **lower, char **upper)
+{
+    
 }
