@@ -4,7 +4,10 @@
 #include <string.h>
 #include "file_handling.h"
 
+#define MAX_DIGITS_IN_RANGE 11
+
 void get_range_numbers(const char *range, int64_t *lower, int64_t *upper);
+void split_range_string(const char *range,);
 
 int main(void)
 {
@@ -14,6 +17,7 @@ int main(void)
 
     fprintf(stdout, "\n");
     int64_t password_one = 0;
+    int64_t password_two = 0;
 
     while (range != NULL)
     {
@@ -36,7 +40,7 @@ int main(void)
 
         for (int64_t i = lower; i <= upper; ++i)
         {
-            char i_string[11];
+            char i_string[MAX_DIGITS_IN_RANGE];
             sprintf_s(i_string, sizeof(i_string) / sizeof(i_string[0]), "%lld", i);
             int i_string_length = strlen(i_string);
 
@@ -58,6 +62,13 @@ int main(void)
                 fprintf(stdout, "%s is an invalid id.\n", i_string);
                 password_one += i;
             }
+        }
+
+        for (int64_t range_index = lower; range_index <= upper; ++range_index)
+        {
+            char range_string[MAX_DIGITS_IN_RANGE];
+            sprintf_s(range_string, sizeof(range_string) / sizeof(range_string[0]), "%lld", range_index);
+            size_t range_string_length = strlen(range_string);
         }
 
         /*
