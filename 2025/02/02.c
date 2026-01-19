@@ -63,6 +63,28 @@ int main(void)
         /*
         loop through the range
         convert the number to a string
+        get the length of the number
+        loop through the length of the number
+        if the length of the number is not divisible by the current index then skip
+        if the current index is the length of the number then skip
+        otherwise check the characters up to the index repeat n times
+        if it does it is invalid so add to the password count and break from the inner loop
+
+        999 is invalid
+        length equals 3
+        3 % 1 equals 0
+        3 / 1 equals 3
+        so 9 must be found three times to be an invalid id
+
+        1010 is invalid
+        length equals 4
+        4 % 1 equals 0
+        4 / 1 equals 4
+        so 1 must be be found four times to be an invalid id, it is not
+
+        4 % 2 equals 0
+        4 / 2 equals 2
+        so 10 must be found twice to be an invalid id and it is.
         */
 
         range = strtok_s(NULL, ",", &next_token);
