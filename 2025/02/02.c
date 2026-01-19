@@ -9,7 +9,8 @@ void get_range_numbers(const char *range, int64_t *lower, int64_t *upper);
 int main(void)
 {
     char *raw_input = read_entire_file_into_buffer();
-    char *range = strtok(raw_input, ",");
+    char *next_token = NULL;
+    char *range = strtok_s(raw_input, ",", &next_token);
 
     fprintf(stdout, "\n");
     int64_t password_one = 0;
@@ -64,7 +65,7 @@ int main(void)
         convert the number to a string
         */
 
-        range = strtok_s(NULL, ",");
+        range = strtok_s(NULL, ",", &next_token);
     }
 
     fprintf(stdout, "password one is: %lld", password_one);
@@ -83,16 +84,18 @@ void get_range_numbers(const char *range, int64_t *lower, int64_t *upper)
         ++c;
     }
 
-    char *lower_string = malloc(sizeof(char) * lower_char_count + 1);
-    strncpy(lower_string, range, lower_char_count);
+    size_t lower_string_size = sizeof(char) * lower_char_count + 1;
+    char *lower_string = malloc(lower_string_size);
+    strncpy_s(lower_string, lower_string_size, range, lower_char_count);
     lower_string[lower_char_count] = '\0';
     fprintf(stdout, "lower range: %s\n", lower_string);
     *lower = atol(lower_string);
 
     int upper_char_count = strlen(range) - lower_char_count - 1;
-    char *upper_string = malloc(sizeof(char) * upper_char_count + 1);
+    size_t upper_string_size = sizeof(char) * upper_char_count + 1;
+    char *upper_string = malloc(upper_string_size);
     const char *upper_string_start = &range[lower_char_count + 1];
-    strncpy(upper_string, upper_string_start, upper_char_count);
+    strncpy_s(upper_string, upper_string_size, upper_string_start, upper_char_count);
     upper_string[upper_char_count] = '\0';
     fprintf(stdout, "upper range: %s\n", upper_string);
     *upper = atol(upper_string);

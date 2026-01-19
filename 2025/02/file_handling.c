@@ -15,7 +15,7 @@ char *read_entire_file_into_buffer(void)
     }
 
     fseek(input_file, 0L, SEEK_END);
-    int64_t input_file_size = ftell(input_file);
+    size_t input_file_size = ftell(input_file);
     fseek(input_file, 0L, SEEK_SET);
     char *buffer = calloc(input_file_size + 1, sizeof(char));
 
@@ -25,7 +25,7 @@ char *read_entire_file_into_buffer(void)
         exit(EXIT_FAILURE);
     }
 
-    int64_t bytes_read = fread(buffer, sizeof(char), input_file_size, input_file);
+    size_t bytes_read = fread(buffer, sizeof(char), input_file_size, input_file);
     fclose(input_file);
     buffer[bytes_read] = '\0';
     fprintf(stdout, "Info: contents of input.txt\n\n%s", buffer);
