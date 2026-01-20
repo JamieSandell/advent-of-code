@@ -12,8 +12,7 @@ void split_range_string(const char *range, char **lower, char **upper);
 int main(void)
 {
     char *raw_input = read_entire_file_into_buffer();
-    char *next_token = NULL;
-    char *range = strtok_s(raw_input, ",", &next_token);
+    char *range = strtok(raw_input, ",");
 
     fprintf(stdout, "\n");
     int64_t password_one = 0;
@@ -41,7 +40,7 @@ int main(void)
         for (int64_t i = lower; i <= upper; ++i)
         {
             char i_string[MAX_DIGITS_IN_RANGE];
-            sprintf_s(i_string, sizeof(i_string) / sizeof(i_string[0]), "%lld", i);
+            sprintf(i_string, "%ld", i);
             int i_string_length = strlen(i_string);
 
             if (i_string_length % 2 != 0)
@@ -67,7 +66,7 @@ int main(void)
         for (int64_t range_index = lower; range_index <= upper; ++range_index)
         {
             char range_string[MAX_DIGITS_IN_RANGE];
-            sprintf_s(range_string, sizeof(range_string) / sizeof(range_string[0]), "%lld", range_index);
+            sprintf(range_string, "%ld", range_index);
             size_t range_string_length = strlen(range_string);
         }
 
@@ -98,10 +97,10 @@ int main(void)
         so 10 must be found twice to be an invalid id and it is.
         */
 
-        range = strtok_s(NULL, ",", &next_token);
+        range = strtok(NULL, ",");
     }
 
-    fprintf(stdout, "password one is: %lld", password_one);
+    fprintf(stdout, "password one is: %ld", password_one);
 
     return EXIT_SUCCESS;
 }
