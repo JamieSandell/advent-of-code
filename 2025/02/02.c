@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,7 +41,7 @@ int main(void)
         for (int64_t i = lower; i <= upper; ++i)
         {
             char i_string[MAX_DIGITS_IN_RANGE];
-            sprintf(i_string, "%ld", i);
+            sprintf(i_string, "%" PRId64, i);
             int i_string_length = strlen(i_string);
 
             if (i_string_length % 2 != 0)
@@ -48,15 +49,11 @@ int main(void)
                 continue;
             }
 
-            int half_i_string_length = i_string_length / 2;
-            char *left = malloc(sizeof(char) * half_i_string_length + 1);
-            memcpy(left, i_string, half_i_string_length);
-            left[half_i_string_length] = '\0';
-            char *right = malloc(sizeof(char) * half_i_string_length + 1);
-            memcpy(right, i_string + half_i_string_length, half_i_string_length);
-            right[half_i_string_length] = '\0';
+            char *lower;
+            char *upper;
+            split_range_string(i_string, &lower, &upper);
             
-            if (strcmp(left, right) == 0)
+            if (strcmp(lower, upper) == 0)
             {
                 fprintf(stdout, "%s is an invalid id.\n", i_string);
                 password_one += i;
@@ -66,7 +63,7 @@ int main(void)
         for (int64_t range_index = lower; range_index <= upper; ++range_index)
         {
             char range_string[MAX_DIGITS_IN_RANGE];
-            sprintf(range_string, "%ld", range_index);
+            sprintf(range_string, "%" PRId64, range_index);
             size_t range_string_length = strlen(range_string);
         }
 
@@ -100,7 +97,7 @@ int main(void)
         range = strtok(NULL, ",");
     }
 
-    fprintf(stdout, "password one is: %ld", password_one);
+    fprintf(stdout, "password one is: %" PRId64, password_one);
 
     return EXIT_SUCCESS;
 }
@@ -135,5 +132,20 @@ void get_range_numbers(const char *range, int64_t *lower, int64_t *upper)
 
 void split_range_string(const char *range, char **lower, char **upper)
 {
-    
+    if (range == NULL)
+    {
+        fprintf(stdout, "Error: range was null\n");
+        return;
+    }
+
+    size_t range_length = strlen(range);
+    size_t lower_half_length = range_length / 2;
+    *lower = malloc(lower_half_length + 1);
+    memcpy(*lower, range, lower_half_length);
+    (*lower)[lower_half_length] = '\0';
+
+    size_t upper_half_length = range_length - lower_half_length;
+    *upper = malloc(upper_half_length + 1);
+    memcpy(*upper, range + lower_half_length, upper_half_length);
+    (*upper)[upper_half_length] = '\0';
 }
