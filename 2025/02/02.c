@@ -10,6 +10,7 @@
 void get_range_numbers(const char *range, int64_t *lower, int64_t *upper);
 void split_string(const char *string, char **first_string, char **second_string, char delimiter);
 void split_string_in_half(const char *string, char **first_half, char **second_half);
+int substring_count(const char *string, const char *substring);
 
 int main(void)
 {
@@ -93,23 +94,31 @@ int main(void)
         for (int64_t current_number_in_range = lower; current_number_in_range <= upper; ++current_number_in_range)
         {
             char current_number_in_range_string[MAX_DIGITS_IN_RANGE];
-            printf_s(current_number_in_range_string, "%" PRId64, current_number_in_range);
+            sprintf(current_number_in_range_string, "%" PRId64, current_number_in_range);
             size_t current_number_length = strlen(current_number_in_range_string);
 
-            for (int i = 0; i < current_number_length; ++i)
+            for (size_t i = 0; i < current_number_length; ++i)
             {
                 if (current_number_in_range % (i + 1) != 0)
                 {
                     continue;
                 }
 
-                // j = current number / (i + 1)
+                // x = current number / (i + 1)
                 // first_x_characters = get first x characters of current number string
-                // first_x_characters must be found j times, if it is add it to the password_two count
+                // first_x_characters must be found x times, if it is add it to the password_two count
                 int x = current_number_length / (i + 1);
+
                 char *first_x_characters = malloc(x + 1);
+
                 first_x_characters = strncpy(first_x_characters, current_number_in_range_string, x);
-                
+                int first_x_characters_found_count = substring_count(current_number_in_range_string, first_x_characters);
+
+                if (first_x_characters_found_count == x)
+                {
+                    ++password_two;
+                }
+
                 free(first_x_characters);
             }
         }
@@ -117,7 +126,8 @@ int main(void)
         range = strtok(NULL, ",");
     }
 
-    fprintf(stdout, "password one is: %" PRId64, password_one);
+    fprintf(stdout, "password one is: %" PRId64 "\n", password_one);
+    fprintf(stdout, "password two is: %" PRId64 "\n", password_two);
 
     return EXIT_SUCCESS;
 }
@@ -137,19 +147,8 @@ void get_range_numbers(const char *range, int64_t *lower, int64_t *upper)
     char *upper_string;
     split_string(range, &lower_string, &upper_string, '-');
 
-    // size_t lower_string_size = sizeof(char) * lower_char_count + 1;
-    // char *lower_string = malloc(lower_string_size);
-    // strncpy_s(lower_string, lower_string_size, range, lower_char_count);
-    // lower_string[lower_char_count] = '\0';
     fprintf(stdout, "lower range: %s\n", lower_string);
     *lower = atol(lower_string);
-
-    // int upper_char_count = strlen(range) - lower_char_count - 1;
-    // size_t upper_string_size = sizeof(char) * upper_char_count + 1;
-    // char *upper_string = malloc(upper_string_size);
-    // const char *upper_string_start = &range[lower_char_count + 1];
-    // strncpy_s(upper_string, upper_string_size, upper_string_start, upper_char_count);
-    // upper_string[upper_char_count] = '\0';
     fprintf(stdout, "upper range: %s\n", upper_string);
     *upper = atol(upper_string);
 }
@@ -195,4 +194,23 @@ void split_string_in_half(const char *string, char **first_half, char **second_h
     *second_half = malloc(half_length + 1);
     memcpy(*second_half, string + half_length, half_length);
     (*second_half)[half_length] = '\0';
+}
+
+int substring_count(const char *string, const char *substring)
+{
+    if (!string || !substring || *substring == '\0')
+    {
+        return 0;
+    }
+
+    const char *temp = string;
+    int count = 0;
+
+    while ((temp = strstr(string, substring)))
+    {
+        ++count;
+        temp += strlen(substring);
+    }
+
+    return count;
 }
