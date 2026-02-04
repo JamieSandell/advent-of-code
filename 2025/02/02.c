@@ -5,7 +5,7 @@
 #include <string.h>
 #include "file_handling.h"
 
-#define MAX_DIGITS_IN_RANGE 11
+#define MAX_DIGITS_IN_RANGE 32
 
 void get_range_numbers(const char *range, int64_t *lower, int64_t *upper);
 void split_string(const char *string, char **first_string, char **second_string, char delimiter);
@@ -62,13 +62,6 @@ int main(void)
             }
         }
 
-        for (int64_t range_index = lower; range_index <= upper; ++range_index)
-        {
-            char range_string[MAX_DIGITS_IN_RANGE];
-            sprintf(range_string, "%" PRId64, range_index);
-            size_t range_string_length = strlen(range_string);
-        }
-
         /*
         loop through the range
             convert the current number in the range to a string
@@ -78,7 +71,7 @@ int main(void)
                 first_x_characters = get first x characters of current number string
                 first_x_characters must be found j times, if it is add it to the password_two count
 
-        Example:
+        Examples:
         12341234 is invalid (1234 two times)
         length equals 8
         8 % 1 equals 0
@@ -89,34 +82,60 @@ int main(void)
         8 / 2 equals 4
         so the first 4 characters (1234) must be found twice (8 / 2)
         it is
+
+        11 is invalid (1 two times)
+        length equals 2
+        2 % 1 equals 0
+        2 / 1 equals 2
+        so the first 1 characters (1) must be found two (2 / 1) times to be an invald id
+        it is
+
+        12 is valid
+        length equals 2
+        2 % 1 equals 0
+        2 / 1 equals 2
+        so the first 1 characters (1) must be found two (2 / 1) times to be an invalid id
+        it isn't.
+        2 % 2 equals 0
+        2 / 2 equals 1
+        so the first 2 characters (12)
         */
 
         for (int64_t current_number_in_range = lower; current_number_in_range <= upper; ++current_number_in_range)
         {
+            if (current_number_in_range == 100)
+            {
+                printf("debug: 100\n");
+            }
+
             char current_number_in_range_string[MAX_DIGITS_IN_RANGE];
             sprintf(current_number_in_range_string, "%" PRId64, current_number_in_range);
             size_t current_number_length = strlen(current_number_in_range_string);
 
-            for (size_t i = 0; i < current_number_length; ++i)
+            for (size_t i = 1; i < current_number_length; ++i)
             {
-                if (current_number_in_range % (i + 1) != 0)
+                if (current_number_length % i != 0)
                 {
                     continue;
                 }
 
-                // x = current number / (i + 1)
+                // x = current number / i
                 // first_x_characters = get first x characters of current number string
                 // first_x_characters must be found x times, if it is add it to the password_two count
-                int x = current_number_length / (i + 1);
+                int x = current_number_length / i;
 
-                char *first_x_characters = malloc(x + 1);
+                char *first_x_characters = malloc(i + 1);
 
-                first_x_characters = strncpy(first_x_characters, current_number_in_range_string, x);
+                first_x_characters = strncpy(first_x_characters, current_number_in_range_string, i);
+                first_x_characters[i] = '\0';
                 int first_x_characters_found_count = substring_count(current_number_in_range_string, first_x_characters);
 
                 if (first_x_characters_found_count == x)
                 {
-                    ++password_two;
+                    password_two += current_number_in_range;
+                    fprintf(stdout, "%s is an invalid id.\n", current_number_in_range_string);
+                    free(first_x_characters);
+                    break;
                 }
 
                 free(first_x_characters);
@@ -148,9 +167,9 @@ void get_range_numbers(const char *range, int64_t *lower, int64_t *upper)
     split_string(range, &lower_string, &upper_string, '-');
 
     fprintf(stdout, "lower range: %s\n", lower_string);
-    *lower = atol(lower_string);
+    *lower = atoll(lower_string);
     fprintf(stdout, "upper range: %s\n", upper_string);
-    *upper = atol(upper_string);
+    *upper = atoll(upper_string);
 }
 
 void split_string(const char *string, char **first_string, char **second_string, char delimiter)
@@ -206,7 +225,7 @@ int substring_count(const char *string, const char *substring)
     const char *temp = string;
     int count = 0;
 
-    while ((temp = strstr(string, substring)))
+    while ((temp = strstr(temp, substring)))
     {
         ++count;
         temp += strlen(substring);

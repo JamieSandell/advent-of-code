@@ -35,8 +35,6 @@ What do you get if you add up all of the invalid IDs?
 
 Your puzzle answer was 34826702005.
 
-The first half of this puzzle is complete! It provides one gold star: *
-
 --- Part Two ---
 The clerk quickly discovers that there are still invalid IDs in the ranges in your list. Maybe the young Elf was doing other silly patterns as well?
 
@@ -58,3 +56,7 @@ From the same example as before:
 Adding up all the invalid IDs in this example produces 4174379265.
 
 What do you get if you add up all of the invalid IDs using these new rules?
+
+Your puzzle answer was 43287141963.
+
+Both parts of this puzzle are complete! They provide two gold stars: **
