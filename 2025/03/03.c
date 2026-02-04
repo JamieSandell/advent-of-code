@@ -11,7 +11,6 @@ int main(void)
 
     while (token != NULL)
     {
-        fprintf(stdout, "%s\n", token);
         token = strtok(NULL, "\n");
     }
 
