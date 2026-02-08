@@ -9,32 +9,39 @@ int main(void)
     char *token = strtok(input, "\n");
     int maximum_joltage = 0; 
 
+
+    // 987654321111111
+    // 811111111111119
+    // 234234234234278
+    // 818181911112111
     while (token != NULL)
     {
-        int largest_number = 0;
-        int second_largest_number = 0;
-        char *c = token;        
+        int largest_joltage = 0;
+        int second_largest_joltage = 0;
+        size_t battery_bank_length = strlen(token);
 
-        while (*c != '\0')
+        for (size_t battery_bank_index = 0; battery_bank_index < battery_bank_length - 1; ++battery_bank_index)
         {
-            int battery = (*c) - '0';
-            
-            if (battery >= largest_number)
+            int current_battery_joltage = token[battery_bank_index] - '0';
+            if (current_battery_joltage > largest_joltage)
             {
-                largest_number = battery;
+                largest_joltage = current_battery_joltage;
+                second_largest_joltage = 0;
             }
-            else if(battery >= second_largest_number)
+            else if(current_battery_joltage > second_largest_joltage)
             {
-                if ((largest_number * 10) + battery > (largest_number * 10) + second_largest_number)
-                {
-                    second_largest_number = battery;
-                }
+                second_largest_joltage = current_battery_joltage;
             }
-
-            ++c;
         }
 
-        maximum_joltage += ((largest_number * 10) + second_largest_number);
+        int last_battery_joltage = token[battery_bank_length - 1] - '0';
+
+        if (last_battery_joltage > second_largest_joltage)
+        {
+            second_largest_joltage = last_battery_joltage;
+        }
+
+        maximum_joltage += ((largest_joltage * 10) + second_largest_joltage);
         token = strtok(NULL, "\n");
     }
 
