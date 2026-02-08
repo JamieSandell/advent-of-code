@@ -1,5 +1,5 @@
-Advent of Code[About][Events][Shop][Settings][Log Out]JamieSandell 4*
-      /^2025$/[Calendar][AoC++][Sponsors][Leaderboards][Stats]
+Advent of Code[About][Events][Shop][Settings][Log Out]JamieSandell 5*
+       y(2025)[Calendar][AoC++][Sponsors][Leaderboards][Stats]
 Our sponsors help make Advent of Code possible:
 Squarepoint - Squarepoint is a global investment firm that combines rigorous research and cutting-edge technology to develop strategies trading across global markets. Technology is integral to our success, check out our careers page.
 --- Day 3: Lobby ---
@@ -29,9 +29,36 @@ The total output joltage is the sum of the maximum joltage from each bank, so in
 
 There are many batteries in front of you. Find the maximum joltage possible from each bank; what is the total output joltage?
 
-To begin, get your puzzle input.
+Your puzzle answer was 17144.
+
+The first half of this puzzle is complete! It provides one gold star: *
+
+--- Part Two ---
+The escalator doesn't move. The Elf explains that it probably needs more joltage to overcome the static friction of the system and hits the big red "joltage limit safety override" button. You lose count of the number of times she needs to confirm "yes, I'm sure" and decorate the lobby a bit while you wait.
+
+Now, you need to make the largest joltage by turning on exactly twelve batteries within each bank.
+
+The joltage output for the bank is still the number formed by the digits of the batteries you've turned on; the only difference is that now there will be 12 digits in each bank's joltage output instead of two.
+
+Consider again the example from before:
+
+987654321111111
+811111111111119
+234234234234278
+818181911112111
+Now, the joltages are much larger:
+
+In 987654321111111, the largest joltage can be found by turning on everything except some 1s at the end to produce 987654321111.
+In the digit sequence 811111111111119, the largest joltage can be found by turning on everything except some 1s, producing 811111111119.
+In 234234234234278, the largest joltage can be found by turning on everything except a 2 battery, a 3 battery, and another 2 battery near the start to produce 434234234278.
+In 818181911112111, the joltage 888911112111 is produced by turning on everything except some 1s near the front.
+The total output joltage is now much larger: 987654321111 + 811111111119 + 434234234278 + 888911112111 = 3121910778619.
+
+What is the new total output joltage?
 
 Answer: 
  
+
+Although it hasn't changed, you can still get your puzzle input.
 
 You can also [Share] this puzzle.

@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,8 +8,8 @@ int main(void)
 {
     char *input = read_entire_file_into_buffer();    
     char *token = strtok(input, "\n");
-    int maximum_joltage = 0; 
-
+    int answer_one = 0; 
+    int64_t answer_two = 0;
 
     // 987654321111111
     // 811111111111119
@@ -41,11 +42,15 @@ int main(void)
             second_largest_joltage = last_battery_joltage;
         }
 
-        maximum_joltage += ((largest_joltage * 10) + second_largest_joltage);
+        answer_one += ((largest_joltage * 10) + second_largest_joltage);
+
+        ////////////////////////
+
+
         token = strtok(NULL, "\n");
     }
 
-    fprintf(stdout, "\nMaximum joltage is: %d\n", maximum_joltage);
+    fprintf(stdout, "\nMaximum joltage for answer 1 is: %d\n", answer_one);
 
     return EXIT_SUCCESS;
 }
