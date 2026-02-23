@@ -68,7 +68,7 @@ int main(void)
             fprintf(stdout, "%d\n", batteries[i]);
         }
 
-        int number_of_batteries_to_discard = battery_bank_length - MAX_BATTERIES_TURN_ON;
+        int number_of_batteries_to_discard = battery_bank_length - MAX_BATTERIES_TURN_ON; // assumes the amount of batteries in a bank is greater than the number to turn on in that bank
 
         for (size_t battery_bank_index = 0; battery_bank_index < battery_bank_length; ++battery_bank_index)
         {
