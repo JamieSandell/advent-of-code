@@ -54,55 +54,27 @@ int main(void)
         //////////////////////// answer two
         /*
         234234234234278, 15 characters, we need 12, so need to discard (or not turn on 3 of these).
-        Can't move batteries, so find the index of the highest number in the first 3 characters.
-        That would be index 2 (number 4). So we can leave the first two batteries (index 0 and 1) turned off.
-        That leaves 13 batteries, so 1 more to leave off.
-        4234234234278, 13 - 12 = 1, so find the lowest number and don't turn it on, that's a 2, so that would leave
-        434234234278 = answer
+        Can't move batteries, so find the index of the highest number that leaves at least 11 numbers,
+        so highest number in the first 4 digits.
+        This would be 4, so that's the first number.
+        Then find the second number by starting the search after the 3, so starting at number 2 (index 3),
+        need to leave 10 numbers, so search between index 3 and index 4, 3 is the highest (index 4) so turn that on.
+        Need another 10 numbers, and there's only 10 numbers left, so turn them all on, which gives
+        434234234278
         */
 
-        size_t batteries_to_leave_off_count = battery_bank_length - MAX_BATTERIES_TURN_ON;
-        int starting_index = 0;
+        int skips_remaining = battery_bank_length - MAX_BATTERIES_TURN_ON;
+        int highest = 0;
 
-        // find the index of the highest battery within first x (batteries_to_leave_off_count) batteries.
-        for (size_t battery_bank_index = 0, largest_battery = 0; battery_bank_index < batteries_to_leave_off_count; ++battery_bank_index)
+        for (int battery_bank_index = 0; battery_bank_index < battery_bank_index + skips_remaining; ++battery_bank_index)
         {
-            int current_battery = token[battery_bank_index] - '0';
+            int current_battery_joltage = token[battery_bank_index] - '0';
 
-            if (current_battery > largest_battery)
+            if (current_battery_joltage > highest)
             {
-                largest_battery = current_battery;
-                starting_index = battery_bank_index;
+                highest = current_battery_joltage;
             }
         }
-
-        batteries_to_leave_off_count = (battery_bank_length - starting_index) - MAX_BATTERIES_TURN_ON;
-
-        // int *batteries = malloc(sizeof(int) * battery_bank_length);
-        // int *battery = batteries;
-
-        // // Store the numeric version in batteries, e.g. '1' would become 1.
-        // for (size_t battery_bank_index = 0; battery_bank_index < battery_bank_length; ++battery_bank_index)
-        // {
-        //     *battery = token[battery_bank_index] - '0';
-        //     ++battery;
-        // }
-
-        // qsort(batteries, battery_bank_length, sizeof(int), compare_ints);
-
-        // for (size_t i = 0; i < battery_bank_length; ++i)
-        // {
-        //     fprintf(stdout, "%d\n", batteries[i]);
-        // }
-
-        // int number_of_batteries_to_discard = battery_bank_length - MAX_BATTERIES_TURN_ON; // assumes the amount of batteries in a bank is greater than the number to turn on in that bank
-
-        // for (size_t battery_bank_index = 0; battery_bank_index < battery_bank_length; ++battery_bank_index)
-        // {
-        //     if (token[battery_bank_index] - '0' == )
-        // }
-
-        // free(batteries);
 
         token = strtok(NULL, "\n");
     }
