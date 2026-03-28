@@ -22,16 +22,6 @@ int main(void)
         //////////////////////// answer one
 
         //////////////////////// answer two
-        /*
-        234234234234278, 15 characters, we need 12, so need to discard (or not turn on 3 of these).
-        Can't move batteries, so find the index of the highest number that leaves at least 11 numbers,
-        so highest number in the first 4 digits.
-        This would be 4, so that's the first number.
-        Then find the second number by starting the search after the 3, so starting at number 2 (index 3),
-        need to leave 10 numbers, so search between index 3 and index 4, 3 is the highest (index 4) so turn that on.
-        Need another 10 numbers, and there's only 10 numbers left, so turn them all on, which gives
-        434234234278
-        */
 		
         token = strtok(NULL, "\n");
     }
