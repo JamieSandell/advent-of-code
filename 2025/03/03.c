@@ -1,3 +1,4 @@
+#include <inttypes.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,7 +15,7 @@ int main(void)
     fprintf(stdout, "\n");
     char *token = strtok(input, "\n");
     int answer_one = 0; 
-    //int64_t answer_two = 0;
+    int64_t answer_two = 0;
 
     // 987654321111111
     // 811111111111119
@@ -62,24 +63,45 @@ int main(void)
         Need another 10 numbers, and there's only 10 numbers left, so turn them all on, which gives
         434234234278
         */
+       
+        char batteries_turned_on_joltage_raw[MAX_BATTERIES_TURN_ON];
+        int current_search_start = 0;
+        int total_skips_allowed = battery_bank_length - MAX_BATTERIES_TURN_ON;
 
-        int skips_remaining = battery_bank_length - MAX_BATTERIES_TURN_ON;
-        int highest = 0;
-
-        for (int battery_bank_index = 0; battery_bank_index < battery_bank_index + skips_remaining; ++battery_bank_index)
+        // Sliding window
+        for (int i = 0; i < MAX_BATTERIES_TURN_ON; ++i)
         {
-            int current_battery_joltage = token[battery_bank_index] - '0';
+            int highest_joltage = -1;
+            int best_index = current_search_start;
+            int search_end = current_search_start + total_skips_allowed;
 
-            if (current_battery_joltage > highest)
+            for (int j = current_search_start; j <= search_end; ++j)
             {
-                highest = current_battery_joltage;
-            }
-        }
+                int value = token[j] - '0';                
 
+                if (value > highest_joltage)
+                {
+                    highest_joltage = value;
+                    best_index = j;
+
+                    if (value == 9) // can't get higher
+                    {
+                        break;
+                    }
+                }
+            }
+
+            batteries_turned_on_joltage_raw[i] = token[best_index];
+            total_skips_allowed -= best_index - current_search_start;
+            current_search_start = best_index + 1;            
+        }
+        
+        answer_two += atoll(batteries_turned_on_joltage_raw);
         token = strtok(NULL, "\n");
     }
 
-    fprintf(stdout, "\nMaximum joltage for answer 1 is: %d\n", answer_one);
+    fprintf(stdout, "\nMaximum joltage for part 1 is: %d\n", answer_one);
+    fprintf(stdout, "\nMaximum joltage for part 2 is: %" PRId64 "\n", answer_two);
 
     return EXIT_SUCCESS;
 }
